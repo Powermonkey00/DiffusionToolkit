@@ -241,12 +241,14 @@ namespace Diffusion.Database
         {
             if (filter.UseSize)
             {
-                var height = filter.Height;
-                if (NumericRegex.IsMatch(height))
-                {
-                    conditions.Add(new KeyValuePair<string, object>("(Height = ?)", int.Parse(height, CultureInfo.InvariantCulture)));
-                }
-
+               var height = filter.Height;
+               if (int.TryParse(height, NumberStyles.Integer, CultureInfo.InvariantCulture, out int parsedHeight))
+               {
+               if (parsedHeight > height)
+               {
+               conditions.Add(new KeyValuePair<string, object>("(Height > ?)", height));
+               }
+            }
                 var width = filter.Width;
                 if (NumericRegex.IsMatch(width))
                 {
